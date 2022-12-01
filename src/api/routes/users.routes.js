@@ -45,7 +45,7 @@ router.post("/create", async (req, res, next) => {
   try {
     const user = req.body;
     const newUser = new User(user);
-    if (newUser.rol === "user") {
+    if (newUser.rol === "patient") {
       const created = await newUser.save();
       return res.status(201).json(created);
     } else {

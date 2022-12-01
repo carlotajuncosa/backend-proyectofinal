@@ -41,4 +41,26 @@ const isAdmin = async (req, res, next) => {
   }
 };
 
-module.exports = { isAuth, isAdmin };
+const isDoctor = async (req, res, next) => {
+  try {
+    const token = req.headers.authorization;
+    if (!token) {
+      return next("Unauthorized");
+    }
+    const parsedToken = token.replace("Bearer ", "");
+    const validToken = verifyJwt(parsedToken);
+    const userLogged = await User.findById(validToken.id);
+
+    if (userLogged.rol === "doctor") {
+      userLogged.password = null;
+      req.user = userLogged;
+      next();
+    } else {
+      return next("You're not a Doctor!");
+    }
+  } catch (error) {
+    return next("Error");
+  }
+};
+
+module.exports = { isAuth, isAdmin, isDoctor };

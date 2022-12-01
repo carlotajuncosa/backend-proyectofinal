@@ -16,6 +16,9 @@ const server = express();
 const indexRoutes = require("./src/api/routes/index.routes");
 const userRoutes = require("./src/api/routes/users.routes");
 const testRoutes = require("./src/api/routes/test.routes");
+const patientRoutes = require("./src/api/routes/patients.routes");
+const doctorRoutes = require("./src/api/routes/doctors.routes");
+const appointmentRoutes = require("./src/api/routes/appointments.routes");
 
 //! Enviromental variables
 const DB_URL = process.env.DB_URL;
@@ -48,6 +51,9 @@ server.use(express.urlencoded({ extended: false }));
 server.use("/", indexRoutes);
 server.use("/users", userRoutes);
 server.use("/test", testRoutes);
+server.use("/patients", patientRoutes);
+server.use("/doctors", doctorRoutes);
+server.use("/appointments", appointmentRoutes);
 
 server.use("*", (req, res) => {
   const error = new Error('PATH NOT FOUND! 404');

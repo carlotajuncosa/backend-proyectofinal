@@ -7,7 +7,7 @@ const userSchema = new Schema(
   {
     email: { type: String, required: true, unique: true, trim: true },
     password: { type: String, required: true },
-    rol: { type: String, default: "user" },
+    rol: { type: String, default: "patient", enum: ["patient", "doctor", "admin"] }
   },
   {
     timestamps: true,

@@ -6,7 +6,7 @@ const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
     folder: "clinica", // <-- ADD FOLDER NAME
-    allowedFormats: ["jpg", "png", "jpeg", "gif"],
+    allowedFormats: ["jpg", "png", "jpeg", "gif", "pdf"],
   },
 });
 

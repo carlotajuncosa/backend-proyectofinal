@@ -26,7 +26,7 @@ router.post("/create", uploadFile.single("img"), async (req, res, next) => {
   try {
     const test = req.body;
     if (req.file) {
-      character.img = req.file.path;
+      test.img = req.file.path;
     }
     const newTest = new Test(test);
     const created = await newTest.save();
@@ -50,10 +50,16 @@ router.delete("/delete/:id", async (req, res, next) => {
   }
 });
 
-router.put("/edit/:id", async (req, res, next) => {
+router.put("/edit/:id", uploadFile.single("img"), async (req, res, next) => {
   try {
     const id = req.params.id;
+    if (test.img) {
+      deleteFile(test.img);
+    }
     const test = req.body;
+    if (req.file) {
+      test.img = req.file.path;
+    }
     const testModify = new Test(test);
     testModify._id = id;
     const testUpdated = await Test.findByIdAndUpdate(id, testModify);

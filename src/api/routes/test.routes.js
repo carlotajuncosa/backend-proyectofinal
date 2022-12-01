@@ -53,8 +53,9 @@ router.delete("/delete/:id", async (req, res, next) => {
 router.put("/edit/:id", uploadFile.single("img"), async (req, res, next) => {
   try {
     const id = req.params.id;
-    if (test.img) {
-      deleteFile(test.img);
+    const testDb = await Test.findById(id);
+    if (testDb.img) {
+      deleteFile(testDb.img);
     }
     const test = req.body;
     if (req.file) {

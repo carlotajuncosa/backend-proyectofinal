@@ -1,5 +1,5 @@
 const express = require("express");
-const { isAdmin } = require("../middlewares/auth");
+const { isAdmin, isAuth } = require("../middlewares/auth");
 const bcrypt = require("bcrypt");
 const { generateSign } = require("../../utils/jwt/jwt");
 const User = require("../models/users.model");
@@ -76,6 +76,16 @@ router.put("/edit/:id", [isAdmin], async (req, res, next) => {
     return res.status(200).json("User edited successfully!");
   } catch (error) {
     return next(error);
+  }
+});
+
+router.post("/checksession", [isAuth], async (req, res, next) => {
+  console.log(req.headers.authorization);
+  try {
+    const getUser = await User.findById(req.user._id);
+    return res.status(200).json(getUser);
+  } catch (error) {
+    return res.status(500).json(error);
   }
 });
 

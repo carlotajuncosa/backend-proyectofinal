@@ -80,6 +80,7 @@ router.put("/edit/:id", [isAdmin], async (req, res, next) => {
 });
 
 router.post("/checksession", [isAuth], async (req, res, next) => {
+  console.log(req.header.authorization);
   try {
     return res.status(200).json(req.user);
   } catch (error) {

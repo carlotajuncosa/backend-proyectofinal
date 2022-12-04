@@ -5,6 +5,15 @@ const { generateSign } = require("../../utils/jwt/jwt");
 const User = require("../models/users.model");
 const router = express.Router();
 
+router.get("/", async (req, res) => {
+  try {
+    const allUsers = await User.find()
+    return res.status(200).json(allUsers);
+  } catch (error) {
+    return res.status(500).json("Error al leer los usuarios");
+  }
+});
+
 router.get("/:email", [isAdmin], async (req, res, next) => {
   try {
     const email = req.params.email;

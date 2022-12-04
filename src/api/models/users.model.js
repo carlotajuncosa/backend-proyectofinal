@@ -8,6 +8,7 @@ const userSchema = new Schema(
     email: { type: String, required: true, unique: true, trim: true },
     password: { type: String, required: true },
     rol: { type: String, default: "patient", enum: ["patient", "doctor", "admin"] },
+    appointment: [{type: mongoose.Types.ObjectId, ref: "appointments"}],
   },
   {
     timestamps: true,

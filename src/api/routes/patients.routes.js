@@ -14,21 +14,22 @@ router.get("/", async (req, res, next) => {
   }
 });
 
-router.get("/:id", async (req, res, next) => {
+
+router.get("/byUser/", [isAuth], async (req, res, next) => {
   try {
-    const id = req.params.id;
-    const patientToFind = await Patient.findById(id);
-    return res.status(200).json(patientToFind);
+    const userID = req.user._id;
+    const patient = await Patient.find({user: userID});
+    return res.status(200).json(patient);
   } catch (error) {
     return next(error);
   }
 });
 
-router.get("/byUser", [isAuth], async (req, res, next) => {
+router.get("/:id", async (req, res, next) => {
   try {
-    const userID = req.user._id;
-    const patient = await Patient.find({user: userID});
-    return res.status(200).json(patient);
+    const id = req.params.id;
+    const patientToFind = await Patient.findById(id);
+    return res.status(200).json(patientToFind);
   } catch (error) {
     return next(error);
   }

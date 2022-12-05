@@ -14,6 +14,16 @@ router.get("/", async (req, res) => {
   }
 });
 
+router.get("/id", [isAuth], async (req, res, next) => {
+  try {
+    const userID = req.user._id;
+    const user = await User.findById(userID);
+    return res.status(200).json(user);
+  } catch (error) {
+    return next(error);
+  }
+});
+
 router.get("/:email", [isAdmin], async (req, res, next) => {
   try {
     const email = req.params.email;

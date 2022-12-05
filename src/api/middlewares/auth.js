@@ -10,7 +10,6 @@ const isAuth = async (req, res, next) => {
     const parsedToken = token.replace("Bearer ", "");
     const validToken = verifyJwt(parsedToken);
     const userLogged = await User.findById(validToken.id);
-    console.log(userLogged);
     userLogged.password = null;
     req.user = userLogged;
     next();

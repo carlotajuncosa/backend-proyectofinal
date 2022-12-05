@@ -1,6 +1,8 @@
 const express = require("express");
 const { uploadFile, deleteFile } = require("../middlewares/cloudinary");
+const { isAuth } = require("../middlewares/auth");
 const Appointments = require("../models/appointments.model");
+const User = require("../models/users.model");
 const router = express.Router();
 
 router.get("/", async (req, res, next) => {
@@ -22,14 +24,24 @@ router.get("/:id", async (req, res, next) => {
   }
 });
 
-router.post("/create", uploadFile.single("img"), async (req, res, next) => {
+
+router.post("/create", [isAuth], uploadFile.single("img"), async (req, res, next) => {
+  const userID = req.user._id;
   try {
+    const user = await User.findById(userID)
+    const userAppointments = user.appointment;
     const appointments = req.body;
     if (req.file) {
       appointments.img = req.file.path;
     }
     const newAppointments = new Appointments(appointments);
     const created = await newAppointments.save();
+    userAppointments.push(created._id.toString())
+    user.appointment = userAppointments;
+    const userModify = new User(user);
+    userModify._id = userID;
+    const userModified = await User.findByIdAndUpdate(userID, userModify);
+    console.log(userModified)
     return res.status(201).json(created);
   } catch (error) {
     return next(error);

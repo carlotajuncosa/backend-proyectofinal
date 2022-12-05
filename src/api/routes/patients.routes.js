@@ -1,6 +1,8 @@
 const express = require("express");
+const { isAuth } = require("../middlewares/auth");
 const { uploadFile, deleteFile } = require("../middlewares/cloudinary");
 const Patient = require("../models/patients.model");
+const User = require("../models/users.model");
 const router = express.Router();
 
 router.get("/", async (req, res, next) => {
@@ -22,12 +24,24 @@ router.get("/:id", async (req, res, next) => {
   }
 });
 
-router.post("/create", uploadFile.single("img"), async (req, res, next) => {
+router.get("/byUser", [isAuth], async (req, res, next) => {
+  try {
+    const userID = req.user._id;
+    const patient = await Patient.find({user: userID});
+    return res.status(200).json(patient);
+  } catch (error) {
+    return next(error);
+  }
+});
+
+router.post("/create", [isAuth],uploadFile.single("img"), async (req, res, next) => {
+  const userID = req.user._id;
   try {
     const patient = req.body;
     if (req.file) {
       patient.img = req.file.path;
     }
+    patient.user = userID
     const newPatient = new Patient(patient);
     const created = await newPatient.save();
     return res.status(201).json(created);
@@ -50,10 +64,11 @@ router.delete("/delete/:id", async (req, res, next) => {
   }
 });
 
-router.put("/edit/:id", uploadFile.single("img"), async (req, res, next) => {
+router.put("/edit/", [isAuth], uploadFile.single("img"), async (req, res, next) => {
+  const userID = req.user._id;
   try {
-    const id = req.params.id;
-    const patientDb = await Patient.findById(id);
+    const patientDb = await Patient.find({user: userID});
+    const id = patientDb._id.toString()
     if (patientDb.img) {
       deleteFile(patientDb.img);
     }

@@ -48,7 +48,7 @@ router.post("/create", [isAuth], uploadFile.single("img"), async (req, res, next
   }
 });
 
-router.delete("/delete/:id", async (req, res, next) => {
+router.delete("/delete/:id", [isAuth], async (req, res, next) => {
   const userID = req.user._id;
   try {
     const user = await User.findById(userID)

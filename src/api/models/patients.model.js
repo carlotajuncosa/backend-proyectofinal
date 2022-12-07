@@ -9,7 +9,7 @@ const patientsSchema = new Schema(
     phone: { type: Number, required: true, trim: true },
     genre: { type: String, required: true, trim: true, enum: ["undefined", "men", "woman"]},
     nif: { type: String, required: true, trim: true, unique: true},
-    birth_date: { type: String, required: true, trim: true, unique: true},
+    birth_date: { type: String, required: true, trim: true},
     img: { type: String, required: true, trim: true },
     medical_record: [{type: mongoose.Types.ObjectId, ref: "appointments"}],
     appointment: [{type: mongoose.Types.ObjectId, ref: "appointments"}],

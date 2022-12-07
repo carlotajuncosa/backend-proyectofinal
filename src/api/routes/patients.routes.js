@@ -2,7 +2,6 @@ const express = require("express");
 const { isAuth } = require("../middlewares/auth");
 const { uploadFile, deleteFile } = require("../middlewares/cloudinary");
 const Patient = require("../models/patients.model");
-const User = require("../models/users.model");
 const router = express.Router();
 
 router.get("/", async (req, res, next) => {
@@ -69,8 +68,8 @@ router.put("/edit/", [isAuth], uploadFile.single("img"), async (req, res, next) 
   const userID = req.user._id;
   try {
     const patientDb = await Patient.find({user: userID});
-    const id = patientDb._id.toString()
-    if (patientDb.img) {
+    const id = patientDb._id;
+    if (req.file && patientDb.img) {
       deleteFile(patientDb.img);
     }
     const patient = req.body;

@@ -80,7 +80,6 @@ router.put("/edit/", [isAuth], uploadFile.single("img"), async (req, res, next) 
     patientModify._id = id;
     patientModify.user = userID;
     const patientUpdated = await Patient.findByIdAndUpdate(id, patientModify);
-    console.log(patientUpdated)
     return res.status(200).json(`Successfully updated --> ${patientUpdated}`);
   } catch (error) {
     return next(error);

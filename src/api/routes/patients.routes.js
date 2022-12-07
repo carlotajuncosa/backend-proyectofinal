@@ -68,9 +68,9 @@ router.put("/edit/", [isAuth], uploadFile.single("img"), async (req, res, next) 
   const userID = req.user._id;
   try {
     const patientDb = await Patient.find({user: userID});
-    const id = patientDb._id;
-    if (req.file && patientDb.img) {
-      deleteFile(patientDb.img);
+    const id = patientDb[0]._id;
+    if (req.file && patientDb[0].img) {
+      deleteFile(patientDb[0].img);
     }
     const patient = req.body;
     if (req.file) {
@@ -78,6 +78,7 @@ router.put("/edit/", [isAuth], uploadFile.single("img"), async (req, res, next) 
     }
     const patientModify = new Patient(patient);
     patientModify._id = id;
+    patientModify.user = userID;
     const patientUpdated = await Patient.findByIdAndUpdate(id, patientModify);
     return res.status(200).json(`Successfully updated --> ${patientUpdated}`);
   } catch (error) {

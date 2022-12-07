@@ -7,7 +7,7 @@ const patientsSchema = new Schema(
     name: { type: String, required: true, trim: true },
     surname: { type: String, required: true, trim: true },
     phone: { type: Number, required: true, trim: true },
-    genre: { type: String, required: true, trim: true, enum: ["undefined", "men", "woman"]},
+    genre: { type: String, required: true, trim: true, enum: ["undefined", "male", "female"]},
     nif: { type: String, required: true, trim: true, unique: true},
     birth_date: { type: String, required: true, trim: true},
     img: { type: String, required: true, trim: true },

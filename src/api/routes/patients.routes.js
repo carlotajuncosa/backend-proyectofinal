@@ -75,7 +75,7 @@ router.put("/edit/", [isAuth], uploadFile.single("img"), async (req, res, next) 
     const patient = req.body;
     if (req.file) {
       patient.img = req.file.path;
-    }
+    } else (patient.img = patientDb[0].img)
     const patientModify = new Patient(patient);
     patientModify._id = id;
     patientModify.user = userID;
